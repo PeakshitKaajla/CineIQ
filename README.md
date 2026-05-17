@@ -22,6 +22,8 @@ Content discovery on modern streaming platforms is opaque, biased toward promote
 - **Tracking:** MLflow for experiment logging
 
 ## 🏃‍♂️ How to Run Locally
+Just Run the servicelauncher.bat
+**OR**
 
 1. **Install Dependencies**
    ```bash
@@ -40,9 +42,3 @@ Content discovery on modern streaming platforms is opaque, biased toward promote
    python -m streamlit run app.py --server.port 8501
    ```
    *The dashboard will be available at [http://localhost:8501](http://localhost:8501).*
-
-## 👨‍🏫 Mentorship
-- **Mentor:** Arnav Gupta (Contact: 7982390939)
-
----
-*Built with ❤️ for ML & MLOps experimentation.*
