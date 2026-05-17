@@ -264,6 +264,35 @@ def build_radar_chart(genre_affinities: dict):
     return fig
 
 
+def build_decade_chart():
+    """
+    Build a Plotly bar chart showing mock decade preferences.
+    """
+    decades = ["1980s", "1990s", "2000s", "2010s", "2020s"]
+    affinities = [40, 65, 85, 95, 75]
+    
+    df = pd.DataFrame({"Decade": decades, "Affinity": affinities})
+    
+    fig = px.bar(
+        df,
+        x="Decade",
+        y="Affinity",
+        template="plotly_dark",
+        color="Affinity",
+        color_continuous_scale=["#5b86e5", "#c23bf0", "#e94560"]
+    )
+    
+    fig.update_layout(
+        paper_bgcolor="rgba(0, 0, 0, 0)",
+        plot_bgcolor="rgba(0, 0, 0, 0)",
+        font=dict(color="#e0e0e0"),
+        margin=dict(l=40, r=40, t=40, b=40),
+        height=380,
+        coloraxis_showscale=False
+    )
+    return fig
+
+
 # ╔══════════════════════════════════════════════════════════════════════════╗
 # ║  SIDEBAR — Weight Sliders                                              ║
 # ╚══════════════════════════════════════════════════════════════════════════╝
@@ -353,8 +382,8 @@ st.markdown("---")
 st.markdown("## 🎯 Your Taste Profile")
 st.caption("Adjust your genre affinities below. These values directly influence the movies recommended to you in real-time!")
 
-# Two-column layout: chart + stats
-chart_col, stats_col = st.columns([3, 1])
+# Three-column layout: radar chart + decade chart + stats
+chart_col, decade_col, stats_col = st.columns([1.2, 1.2, 1])
 
 with stats_col:
     st.markdown("#### Genre Affinities")
@@ -373,7 +402,20 @@ with stats_col:
     }
 
 with chart_col:
+    st.markdown("#### Genre Distribution")
     st.plotly_chart(build_radar_chart(current_affinities), width="stretch")
+
+with decade_col:
+    st.markdown("#### Decade Preferences")
+    st.plotly_chart(build_decade_chart(), width="stretch")
+
+st.markdown("---")
+st.markdown("## 🎬 Top Affinities")
+aff1, aff2, aff3, aff4 = st.columns(4)
+aff1.metric("Director", "Christopher Nolan", "Top Match")
+aff2.metric("Director", "Quentin Tarantino", "High Match")
+aff3.metric("Actor", "Leonardo DiCaprio", "Top Match")
+aff4.metric("Actor", "Tom Hanks", "High Match")
 
 st.markdown("---")
 
