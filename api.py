@@ -115,6 +115,21 @@ def load_dataset():
         col_score = int(h[4:8], 16) % 100
         s_score = int(h[8:12], 16) % 100
         
+        # Make them polarized so sliders have a dramatic effect
+        primary_strength = int(h[12:14], 16) % 3
+        if primary_strength == 0:
+            c_score = 80 + (c_score % 20)
+            col_score = 20 + (col_score % 30)
+            s_score = 20 + (s_score % 30)
+        elif primary_strength == 1:
+            c_score = 20 + (c_score % 30)
+            col_score = 80 + (col_score % 20)
+            s_score = 20 + (s_score % 30)
+        else:
+            c_score = 20 + (c_score % 30)
+            col_score = 20 + (col_score % 30)
+            s_score = 80 + (s_score % 20)
+        
         candidates.append({
             "title": title,
             "genres": genres,
@@ -167,12 +182,12 @@ async def get_recommendations(
         movie_genres = c['genres'].split('|')
         
         # Calculate bonus: If affinity > 50, it's a positive boost. If < 50, it's a penalty.
-        # We scale the modifier so 100 adds up to +20, and 0 adds up to -20 per matched genre.
-        if "Action" in movie_genres: genre_bonus += (action_affinity - 50) * 0.4
-        if "Sci-Fi" in movie_genres: genre_bonus += (scifi_affinity - 50) * 0.4
-        if "Romance" in movie_genres: genre_bonus += (romance_affinity - 50) * 0.4
-        if "Comedy" in movie_genres: genre_bonus += (comedy_affinity - 50) * 0.4
-        if "Horror" in movie_genres: genre_bonus += (horror_affinity - 50) * 0.4
+        # We scale the modifier so 100 adds up to +50, and 0 adds up to -50 per matched genre.
+        if "Action" in movie_genres: genre_bonus += (action_affinity - 50) * 1.0
+        if "Sci-Fi" in movie_genres: genre_bonus += (scifi_affinity - 50) * 1.0
+        if "Romance" in movie_genres: genre_bonus += (romance_affinity - 50) * 1.0
+        if "Comedy" in movie_genres: genre_bonus += (comedy_affinity - 50) * 1.0
+        if "Horror" in movie_genres: genre_bonus += (horror_affinity - 50) * 1.0
         
         # Ensure the content score stays bounded between 0 and 100
         adjusted_content = min(100.0, max(0.0, base_content + genre_bonus))

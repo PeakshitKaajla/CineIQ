@@ -264,12 +264,24 @@ def build_radar_chart(genre_affinities: dict):
     return fig
 
 
-def build_decade_chart():
+def build_decade_chart(genre_affinities: dict):
     """
-    Build a Plotly bar chart showing mock decade preferences.
+    Build a Plotly bar chart showing mock decade preferences based on genre affinities.
     """
+    action = genre_affinities.get("Action", 50)
+    scifi = genre_affinities.get("Sci-Fi", 50)
+    romance = genre_affinities.get("Romance", 50)
+    comedy = genre_affinities.get("Comedy", 50)
+    horror = genre_affinities.get("Horror", 50)
+    
     decades = ["1980s", "1990s", "2000s", "2010s", "2020s"]
-    affinities = [40, 65, 85, 95, 75]
+    affinities = [
+        min(100, max(10, (action + horror) // 2 + 15)),      # 80s: Action & Horror
+        min(100, max(10, (romance + comedy) // 2 + 10)),     # 90s: Romance & Comedy
+        min(100, max(10, (scifi + action) // 2 + 5)),        # 00s: Sci-Fi & Action
+        min(100, max(10, (comedy + scifi) // 2 + 20)),       # 10s: Comedy & Sci-Fi
+        min(100, max(10, (horror + romance) // 2 + 5)),      # 20s: Horror & Romance
+    ]
     
     df = pd.DataFrame({"Decade": decades, "Affinity": affinities})
     
@@ -407,15 +419,35 @@ with chart_col:
 
 with decade_col:
     st.markdown("#### Decade Preferences")
-    st.plotly_chart(build_decade_chart(), width="stretch")
+    st.plotly_chart(build_decade_chart(current_affinities), width="stretch")
 
 st.markdown("---")
 st.markdown("## 🎬 Top Affinities")
+
+# Dynamic logic for directors and actors based on highest genre
+top_genre = max(current_affinities, key=current_affinities.get)
+
+if top_genre == "Action":
+    dir1, dir2 = "Michael Bay", "James Cameron"
+    act1, act2 = "Tom Cruise", "Keanu Reeves"
+elif top_genre == "Sci-Fi":
+    dir1, dir2 = "Christopher Nolan", "Denis Villeneuve"
+    act1, act2 = "Harrison Ford", "Sigourney Weaver"
+elif top_genre == "Romance":
+    dir1, dir2 = "Nora Ephron", "Richard Curtis"
+    act1, act2 = "Ryan Gosling", "Rachel McAdams"
+elif top_genre == "Comedy":
+    dir1, dir2 = "Edgar Wright", "Taika Waititi"
+    act1, act2 = "Jim Carrey", "Emma Stone"
+else: # Horror
+    dir1, dir2 = "James Wan", "Jordan Peele"
+    act1, act2 = "Anya Taylor-Joy", "Jamie Lee Curtis"
+
 aff1, aff2, aff3, aff4 = st.columns(4)
-aff1.metric("Director", "Christopher Nolan", "Top Match")
-aff2.metric("Director", "Quentin Tarantino", "High Match")
-aff3.metric("Actor", "Leonardo DiCaprio", "Top Match")
-aff4.metric("Actor", "Tom Hanks", "High Match")
+aff1.metric("Director", dir1, "Top Match")
+aff2.metric("Director", dir2, "High Match")
+aff3.metric("Actor", act1, "Top Match")
+aff4.metric("Actor", act2, "High Match")
 
 st.markdown("---")
 

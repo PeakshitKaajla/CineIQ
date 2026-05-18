@@ -10,6 +10,9 @@ Content discovery on modern streaming platforms is opaque, biased toward promote
 - **Explainability Layer:** Every recommendation surfaces a human-readable reason using LIME or rule-based templates.
 
 ## 📊 Datasets
+
+> **Note:** The datasets are not uploaded to this GitHub repository due to file size limits. To run the project locally, please download the datasets and place them inside a folder named `dataset/` in the root of the project directory.
+
 - **[MovieLens 25M](https://grouplens.org/datasets/movielens/25m/)** — User ratings and core metadata.
 - **[TMDB Metadata (Kaggle)](https://www.kaggle.com/)** — Cast, genres, keywords for 45K movies.
 - **[IMDB 50K Reviews (Kaggle)](https://www.kaggle.com/)** — Used for sentiment model training.
